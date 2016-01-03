@@ -24,3 +24,4 @@ The library tries as hard as possible to not seek ahead.
 ## Development
     git clone https://github.com/talwrii/seekstream.git
     cd seekstream
+    ./runtests.sh # tests coverage
