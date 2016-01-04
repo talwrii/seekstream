@@ -11,6 +11,7 @@ class Test(unittest.TestCase):
         f.seek = lambda: None
         f.tell = lambda: None
         self.sample_stream = f
+        self.seek_stream = SeekableStream(self.sample_stream)
 
     def test_read_all(self):
         stream = SeekableStream(self.sample_stream)
@@ -28,6 +29,10 @@ class Test(unittest.TestCase):
         # Seek to the end
         stream.seek(0, 2)
 
+    def test_relative_seek(self):
+        self.seek_stream.seek(3, 1)
+        self.assertEquals(self.seek_stream.read(1), "3")
+
     def test_random_access_first_read(self):
         stream = SeekableStream(self.sample_stream)
         stream.seek(0, 2)
@@ -44,6 +49,14 @@ class Test(unittest.TestCase):
                 lines.append(line)
 
         self.assertEquals(lines, self.text.splitlines())
+
+    def test_no_move_seek(self):
+        f = self.sample_stream
+        stream = SeekableStream(self.sample_stream)
+        stream.seek(0)
+        stream.readline()
+        self.assertEquals(stream.readline(), "two\n")
+
 
     def test_basic(self):
         f = self.sample_stream

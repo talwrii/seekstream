@@ -10,7 +10,11 @@ def switch_proxy(f):
                 return ''
             except FinishedBuffer as e:
                 self.proxy = self.buffer_read_proxy
-                return e.partial_result + switch_proxy(f)(self, *e.args, **e.kwargs)
+                rest = switch_proxy(f)(self, *e.args, **e.kwargs)
+                if e.partial_result:
+                    return e.partial_result + rest
+                else:
+                    return rest
             except CannotSeek:
                 self.proxy = self.buffer_reread_proxy
                 return switch_proxy(f)(self, *args, **kwargs)
@@ -94,6 +98,8 @@ class BufferReadAdaptor(object):
         num_to_read = pos - self.buffer.tell()
         if num_to_read < 0:
             raise CannotSeek()
+        elif num_to_read == 0:
+            pass
         else:
             self.read(num_to_read)
 
