@@ -8,7 +8,7 @@ The library tries as hard as possible to not seek ahead.
 
 ## Installation
 
-    pip install git+https://github.com/talwrii/seekstream.git
+    pip install git+https://github.com/talwrii/seekstream.git#seekstream
 
 ## Usage
 
