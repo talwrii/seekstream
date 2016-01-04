@@ -60,7 +60,10 @@ class BufferReadAdaptor(object):
         self.stream = stream
 
     def read(self, num):
-        result = self._buffered_operation(self.stream.read, num)
+        if num is None:
+            result = self._buffered_operation(self.stream.read)
+        else:
+            result = self._buffered_operation(self.stream.read, num)
         if result == '':
             raise FinishedReading()
         else:
