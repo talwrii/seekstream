@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
         self.seek_stream = SeekableStream(self.sample_stream)
 
     def test_read_all(self):
-        stream = SeekableStream(self.sample_stream)
+        stream = self.seek_stream
         text = stream.read()
         self.assertEquals(text[:3], "012")
         self.assertEquals(text[-3:], "ree")
@@ -34,15 +34,14 @@ class Test(unittest.TestCase):
         self.assertEquals(self.seek_stream.read(1), "3")
 
     def test_random_access_first_read(self):
-        stream = SeekableStream(self.sample_stream)
-        stream.seek(0, 2)
-        self.assertEquals(stream.tell(), len(self.text))
+        self.seek_stream.seek(0, 2)
+        self.assertEquals(self.seek_stream.tell(), len(self.text))
 
     def test_readline_first_access(self):
         stream = SeekableStream(self.sample_stream)
         lines = []
         while True:
-            line = stream.readline().strip()
+            line = self.seek_stream.readline().strip()
             if line == '':
                 break
             else:
@@ -51,16 +50,14 @@ class Test(unittest.TestCase):
         self.assertEquals(lines, self.text.splitlines())
 
     def test_no_move_seek(self):
-        f = self.sample_stream
-        stream = SeekableStream(self.sample_stream)
-        stream.seek(0)
-        stream.readline()
-        self.assertEquals(stream.readline(), "two\n")
+        self.seek_stream.seek(0)
+        self.seek_stream.readline()
+        self.assertEquals(self.seek_stream.readline(), "two\n")
 
 
     def test_basic(self):
+        stream = self.seek_stream
         f = self.sample_stream
-        stream = SeekableStream(self.sample_stream)
 
         # Seeking and telling
         stream.seek(1)
